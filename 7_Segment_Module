@@ -1,0 +1,46 @@
+//This module controls the 7 segment HEX displays (any from HEX0 to HEX5)
+//Written and implemented by Junaid Chatoor
+//First two LEDs of the 7 segment display i.e. 0 and 1 are written as wires
+//Last five LEDs of the 7 segment display i.e. 2,3,4,5,6 and 7 are written as regs
+
+module seg7(f,seg);
+
+	input [3:0]f;
+	reg [4:0]b;
+	wire [1:0]a;
+	output [6:0]seg;
+	
+	assign a[0] = (((~f[3])&(~f[2])&(~f[1])&f[0])|((~f[3])&f[2]&(~f[1])&(~f[0]))|(f[3]&(~f[2])&f[1]&f[0])|(f[3]&f[2]&(~f[1])&f[0]));
+	//A'B'C'D + A'BC'D' + AB'CD + ABC'D
+	//A'B'C'D + A'BC'D' + AB'CD + ABC'D
+	assign a[1] = ((f[2]&f[1]&(~f[0]))|(f[3]&f[1]&f[0])|(f[3]&f[2]&(~f[0]))|((~f[3])&f[2]&(~f[1])&f[0]));
+	//BCD' + ACD + ABD' + A'BC'D
+	//BCD' + ACD + ABD' + A'BC'D
+	
+	always @ (f)
+	begin
+		case(f)
+		   default: b = 5'b00000;
+			0: b = 5'b10000;
+			1: b = 5'b11110;
+			2: b = 5'b01001;
+			3: b = 5'b01100;
+			4: b = 5'b00110;
+			5: b = 5'b00100;
+			6: b = 5'b00000;
+			7: b = 5'b11110;
+			8: b = 5'b00000;
+			9: b = 5'b00110;
+			10: b = 5'b00010;
+			11: b = 5'b00000;
+			12: b = 5'b10001;
+			13: b = 5'b01000;
+			14: b = 5'b00001;
+			15: b = 5'b00011;
+		endcase
+	end
+	
+	assign seg[6:0] = {b[4],b[3],b[2],b[1],b[0],a[1],a[0]};
+
+endmodule
+	
