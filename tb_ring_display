@@ -1,0 +1,46 @@
+//Test bench for ring_display
+//Written and implemented by Junaid Chatoor
+
+module tb_ring_display();
+
+   reg clk;
+	wire [7:0] hex0,hex1,hex2,hex3,hex4,hex5;
+	reg [1:0] key;
+	wire [9:0] ledr;
+	reg   [9:0] sw;
+	
+	Lab5 l1(.MAX10_CLK1_50(clk),.HEX0(hex0),.HEX1(hex1),.HEX2(hex2),.HEX3(hex3),.HEX4(hex4),.HEX5(hex5),.LEDR(ledr),.SW(sw),.KEY(key));
+
+	initial begin
+		sw = 10'b0000000001;
+		key = 2'b10;		
+		sw[0] = 1'b0;
+		#10;
+		sw[9] = 1'b1;
+		sw[1] = 1'b1;
+		#10000;
+		key = 2'b01;
+		#625;
+		sw[1] = 1'b0;
+		#10000;
+		key[1] = 1'b1;
+		#10000;
+		key[1] = 1'b0;
+		#10000;
+		sw[1] = 1'b1;
+		key[1] = 1'b1;
+		#10000;
+		sw[1] = 1'b0;
+	end
+	
+	initial begin 
+		clk = 0;
+	end
+	always begin
+		#2;
+		clk = ~clk;
+	end
+		
+
+	
+endmodule	
